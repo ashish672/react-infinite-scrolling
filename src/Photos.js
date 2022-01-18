@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroller';
 import { useInfiniteQuery } from 'react-query';
-import {  Card, Container } from 'react-bootstrap'
+import PostCard from './Components/PostCard';
 import Spinner from 'react-bootstrap/Spinner'
 const fetchPhotos = async (page) => {
-    const res = await fetch(`/v2/list?page=${page}&limit=5`)
+    const res = await fetch(`https://picsum.photos/v2/list?page=${page}&limit=5`)
     const results = await res.json();
     return {
         results,
@@ -42,14 +42,9 @@ const Photos = () => {
 
             <InfiniteScroll hasMore={hasNextPage} loadMore={fetchNextPage}>
                 {data.pages.map((page) =>
-                    page.results.map((post) => <>
-                        <Card style={{  margin : '0 auto' }}>
-                            <Card.Body>
-                                <Card.Title as = 'h4'>{post.author}</Card.Title>
-                            </Card.Body>
-                            <Card.Img variant="top" src={post.download_url} style={ {width : 400 , height : 400}} />
-                        </Card>
-                    </>))}
+                    page.results.map((post) => <PostCard key={post.id} post={post} />
+                        
+                    ))}
             </InfiniteScroll>
                         {isFetching && <Spinner animation="border" role="status">
   <span className="visually-hidden">Loading...</span>
